@@ -4,34 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐍 Красивая Змейка</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Меню -->
     <div id="menuScreen" class="screen">
         <div class="menu-content">
-            <h1>🐍 ЗМЕЙКА</h1>
+            <h1 class="glitch">🐍 ЗМЕЙКА</h1>
             <div class="menu-stats">
                 <div class="stat">
-                    <span class="stat-label">Рекорд:</span>
+                    <span class="stat-label">🏆 Рекорд:</span>
                     <span id="highScore" class="stat-value">0</span>
                 </div>
+                <div class="stat">
+                    <span class="stat-label">🎮 Игр сыграно:</span>
+                    <span id="gamesPlayed" class="stat-value">0</span>
+                </div>
             </div>
-            <button id="startBtn" class="menu-btn">🎮 НАЧАТЬ ИГРУ</button>
-            <button id="howToPlayBtn" class="menu-btn secondary">❓ КАК ИГРАТЬ</button>
+            <div class="menu-buttons">
+                <button id="startBtn" class="menu-btn">🎮 НАЧАТЬ ИГРУ</button>
+                <button id="achievementsBtn" class="menu-btn secondary">🏅 ДОСТИЖЕНИЯ</button>
+                <button id="howToPlayBtn" class="menu-btn secondary">❓ КАК ИГРАТЬ</button>
+                <button id="settingsBtn" class="menu-btn secondary">⚙️ НАСТРОЙКИ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран достижений -->
+    <div id="achievementsScreen" class="screen" style="display: none;">
+        <div class="achievements-content">
+            <h2>🏅 ДОСТИЖЕНИЯ</h2>
+            <div id="achievementsList" class="achievements-grid">
+                <!-- Достижения будут добавлены через JS -->
+            </div>
+            <button id="backToMenuFromAchievements" class="menu-btn">🔙 НАЗАД</button>
+        </div>
+    </div>
+
+    <!-- Настройки -->
+    <div id="settingsScreen" class="screen" style="display: none;">
+        <div class="settings-content">
+            <h2>⚙️ НАСТРОЙКИ</h2>
+            <div class="setting-item">
+                <label>🔊 Звуки</label>
+                <input type="checkbox" id="soundToggle" checked>
+            </div>
+            <div class="setting-item">
+                <label>🎨 Частицы</label>
+                <input type="checkbox" id="particlesToggle" checked>
+            </div>
+            <div class="setting-item">
+                <label>🎮 Сложность</label>
+                <select id="difficultySelect">
+                    <option value="easy">Легкая</option>
+                    <option value="normal" selected>Нормальная</option>
+                    <option value="hard">Сложная</option>
+                    <option value="insane">Безумная</option>
+                </select>
+            </div>
+            <button id="saveSettingsBtn" class="menu-btn">💾 СОХРАНИТЬ</button>
+            <button id="backToMenuFromSettings" class="menu-btn secondary">🔙 НАЗАД</button>
         </div>
     </div>
 
     <!-- Экран инструкции -->
     <div id="howToPlayScreen" class="screen" style="display: none;">
         <div class="instructions-content">
-            <h2>КАК ИГРАТЬ</h2>
+            <h2>❓ КАК ИГРАТЬ</h2>
             <div class="instructions-list">
-                <p>🎯 Собирай яблоки, чтобы расти</p>
-                <p>🎮 Используй стрелки для управления</p>
-                <p>⚠️ Не врезайся в стенки и себя</p>
-                <p>⚡ С каждым яблоком скорость увеличивается</p>
+                <div class="instruction-item">
+                    <span class="key">↑</span>
+                    <span>Движение вверх</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">↓</span>
+                    <span>Движение вниз</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">←</span>
+                    <span>Движение влево</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">→</span>
+                    <span>Движение вправо</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">ПРОБЕЛ</span>
+                    <span>Пауза</span>
+                </div>
+            </div>
+            <div class="bonus-info">
+                <h3>🎁 БОНУСЫ:</h3>
+                <div class="bonus-item">
+                    <span class="bonus-star">⭐</span>
+                    <span>Звезда - +50 очков</span>
+                </div>
+                <div class="bonus-item">
+                    <span class="bonus-speed">⚡</span>
+                    <span>Молния - временная замедленная скорость</span>
+                </div>
             </div>
             <button id="backToMenuBtn" class="menu-btn">🔙 НАЗАД</button>
         </div>
@@ -42,22 +114,42 @@
         <div class="game-header">
             <div class="score-container">
                 <div class="score-item">
-                    <span class="score-label">СЧЕТ:</span>
+                    <span class="score-label">🎯 СЧЕТ:</span>
                     <span id="score" class="score-value">0</span>
                 </div>
                 <div class="score-item">
-                    <span class="score-label">СКОРОСТЬ:</span>
+                    <span class="score-label">⚡ СКОРОСТЬ:</span>
                     <span id="speed" class="score-value">1</span>
                 </div>
+                <div class="score-item">
+                    <span class="score-label">🍎 ЯБЛОКИ:</span>
+                    <span id="apples" class="score-value">0</span>
+                </div>
             </div>
-            <button id="pauseBtn" class="pause-btn">⏸️</button>
+            <div class="game-controls">
+                <button id="pauseBtn" class="control-btn">⏸️</button>
+                <button id="muteBtn" class="control-btn">🔊</button>
+            </div>
         </div>
-        <canvas id="gameCanvas" width="600" height="600"></canvas>
+        <div class="game-area">
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+            <div id="particlesContainer"></div>
+        </div>
         
         <!-- Пауза -->
         <div id="pauseScreen" class="overlay" style="display: none;">
             <div class="overlay-content">
-                <h2>ПАУЗА</h2>
+                <h2>⏸️ ПАУЗА</h2>
+                <div class="pause-stats">
+                    <div class="stat">
+                        <span class="stat-label">Текущий счет:</span>
+                        <span id="pauseScore" class="stat-value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Длина змейки:</span>
+                        <span id="pauseLength" class="stat-value">3</span>
+                    </div>
+                </div>
                 <button id="resumeBtn" class="menu-btn">▶️ ПРОДОЛЖИТЬ</button>
                 <button id="quitBtn" class="menu-btn secondary">🚪 ВЫЙТИ</button>
             </div>
@@ -66,26 +158,39 @@
         <!-- Конец игры -->
         <div id="gameOverScreen" class="overlay" style="display: none;">
             <div class="overlay-content">
-                <h2>ИГРА ОКОНЧЕНА</h2>
+                <h2 class="game-over-title">💀 ИГРА ОКОНЧЕНА</h2>
                 <div class="final-stats">
                     <div class="stat">
-                        <span class="stat-label">Счет:</span>
+                        <span class="stat-label">🎯 Счет:</span>
                         <span id="finalScore" class="stat-value">0</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Рекорд:</span>
+                        <span class="stat-label">🏆 Рекорд:</span>
                         <span id="finalHighScore" class="stat-value">0</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-label">Длина змейки:</span>
+                        <span class="stat-label">🐍 Длина змейки:</span>
                         <span id="snakeLength" class="stat-value">1</span>
                     </div>
+                    <div class="stat">
+                        <span class="stat-label">🍎 Съедено яблок:</span>
+                        <span id="applesEaten" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div id="newRecord" class="new-record" style="display: none;">
+                    🎉 НОВЫЙ РЕКОРД! 🎉
                 </div>
                 <button id="playAgainBtn" class="menu-btn">🔄 ИГРАТЬ СНОВА</button>
                 <button id="menuBtn" class="menu-btn secondary">🏠 В МЕНЮ</button>
             </div>
         </div>
     </div>
+
+    <!-- Звуковые эффекты (встроенные) -->
+    <audio id="eatSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFfHl8f4eMjIuLi4yNjY6Pj5CQkZGSkpOTlJSVlZaWl5eYmJmZmpqbm5ycnZ2enp+foKCgoaGioqOjpKSlpaamp6eoqKmpqqqrrKyt
+        <!-- Здесь можно добавить base64 коды звуков -->
+    </audio>
 
     <script src="script.js"></script>
 </body>
